@@ -8,17 +8,18 @@ class tree  :
     def __init__(self):
         self.root = None
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////////////\\\\\\\\\\ 
+    #اضافه کردن
     def insert ( self , root , data) :
         if root is None :
             return treenode(data)
         if data < root.data :
-    
             root.left = self.insert (root.left ,data)
         else :
             root.right = self.insert (root.right , data)
         return root
 
 #\/\/\/\/\/\/\/\/\/\/\/\\/\/\/\\//\\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+    #پیمایش درخت از چپ ->ریشه -> راست
     def inorder_traversal(  self ,root) :
         if not root :
             return []
@@ -32,62 +33,66 @@ class tree  :
             self.inorder_traversel_print(root.right)
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////
+    #پیمایش درخت از چپ ->راست ->ریشه
     def postorder_traversal(self , root) :
         if not root :
             return []
-        return self.inorder_traversal(root.left) + self.inorder_traversal(root.right) + [root.data] 
+        return self.postorder_traversal(root.left) + self.postorder_traversal(root.right) + [root.data] 
 
 #////////////////////////////////////////////////////////////////////////////////
     def postorder_traversal_print(self , root) :
         if root :
-            self.inorder_traversel_print(root.left)
-            self.inorder_traversel_print(root.right)
-            print (root.data)
+            self.postorder_traversal_print(root.left)
+            self.postorder_traversal_print(root.right)
+            print ( root.data)
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #پیمایش درخت از ریشه-<چپ->راست
     def preorder_traversal(self , root) :
         if not root :
             return []
-        return    [root.data] + self.inorder_traversal(root.left) + self.inorder_traversal(root.right)
+        return    [root.data] + self.inorder_traversal(root.left) + self.prerder_traversal(root.right)
     
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    def postorder_traversal_print(self , root) :
+    def preorder_traversal_print(self , root) :
         if root :
             print (root.data)
-            self.inorder_traversel_print(root.left)
-            self.inorder_traversel_print(root.right)
+            self.prerder_traversel_print(root.left)
+            self.prerder_traversel_print(root.right)
             
 
 #///////////////////////////////////////////////////////////////////////////////////////////////////
+    #متد حاصل جمع تمام مقادیر گره ها
     def sum_v_n(self , root):
         if root is None:
             return 0
         return  root.data + self.sum_v_n(root.left) + self.sum_v_n(root.right)
-    #متد حاصل جمع تمام مقادیر گره ها
+    
 #/////////////////////////////////////////////////////////////////////////////////////////
+    #متد محاسبه ارتفاع درخت باینری
     def  height_tree(self ,root ) :
         if root == None :
             return 0
         return 1 + max(self.height_tree(root.left) , self.height_tree(root.right))
-    #متد محاسبه ارتفاع درخت باینری
+    
 #///////////////////////////////////////////////////////////////////////////////////////////
-
+    #محاسبه تعداد برگهای درخت
     def  count_leaves(self , root) :
         if root is None :
             return 0
         if root.left  is  None  and  root.right is None :
             return 1
         return self.count_leaves(root.left) + self.count_leaves(root.right)
-    #محاسبه تعداد برگهای درخت
-#//////////////////////////////////////////////////////////////////////////////////////////////////
     
+#//////////////////////////////////////////////////////////////////////////////////////////////////
+    #محاسبه تعداد گره های درخت
     def count_Node (self , root ) :
         if root is None :
             return 0
         return 1 + self.count_Node(root.left) + self.count_Node(root.right)
-    #محاسبه تعداد گره های درخت
+    
 #///////////////////////////////////////////////////////////////////////////////////////////////////
-
+    #محاسبه گره های درجه 1
     def C_1D(self , root ):
         if root is None :
             return 0
@@ -98,7 +103,7 @@ class tree  :
         return self.C_1D(root.left) + self.C_1D(root.right)
     
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    #محاسبه گره های درجه 2
     def C_2D(self , root ):
         if root is None :
             return 0
@@ -132,6 +137,7 @@ class tree  :
         return min (self.min_tree(root.left) , self.min_tree(root.right) , root.data)
     
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #ساخت درخت با preorder , inorder 
     def build_tree(self , preorder , inorder) :
         if not preorder or not inorder :
             return None
@@ -142,6 +148,7 @@ class tree  :
         n.right = self.build_tree(preorder[1 + index : ] , inorder[1 + index : ])
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #تشخیص درخت متقارن
     def is_symmetric(self, root, left=None, right=None):
         
         if root is None:
@@ -157,13 +164,23 @@ class tree  :
         return (self.is_symmetric(root, left.left, right.right) and self.is_symmetric(root, left.right, right.left))
     
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #معکوس کردن
+    def inv_tree( self , root) :
+        if not root :
+            return None
+        root.left , root.right = root.right , root.left
+        self.inv_tree(root.left)
+        self.inv_tree(root.right)
 
+#///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 r = tree()
 for i in [6 , 8 ,87,45,9,32 ,90 ,34 ,1 ,87] :
     r.root = r.insert (r.root, i )
-print (r.inorder_traversal(r.root)) 
+print ("inorder_traversal = " , r.inorder_traversal(r.root)) 
 r.inorder_traversel_print(r.root)
-print ( "sum_v_n = " , r.sum_v_n(r.root)) 
-print ( "count_leaves = " , r.count_leaves(r.root))
-print("height_tree = " , r.height_tree(r.root))
+#print ( "sum_v_n = " , r.sum_v_n(r.root)) 
+#print ( "count_leaves = " , r.count_leaves(r.root))
+#print("height_tree = " , r.height_tree(r.root))
+print ("postorder_traversal =  " , r.postorder_traversal(r.root))
+r.postorder_traversal_print(r.root)
